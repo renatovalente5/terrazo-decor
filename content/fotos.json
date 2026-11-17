@@ -429,7 +429,7 @@
   },
   "sara-1": {
     "alt": "A Sara, a sorrir, ao lado de duas flower boxes",
-    "foco": "50% 35%"
+    "foco": "58% 30%"
   },
   "sara-2": {
     "alt": "A Sara, de avental, com um arranjo de outono em cera nas mãos",
@@ -438,5 +438,9 @@
   "natal-carta": {
     "alt": "Cartão «A Christmas Tale está a chegar», com laço vermelho e ramos de pinheiro",
     "foco": "50% 50%"
+  },
+  "sara-3": {
+    "alt": "A Sara a arranjar uma flower box com flores azuis em cera, ao lado de outras caixas",
+    "foco": "62% 35%"
   }
 }

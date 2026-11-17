@@ -2,7 +2,7 @@ titulo: Terrazo, só com um Z
 tituloSeo: A minha história
 subtitulo: Sou a Sara. Faço à mão peças para tornar especial o que já importa.
 descricao: A história da Terrazo.Decor: a Sara começou com a Jesmonite e as peças em terrazzo, e hoje faz flower boxes, velas e Wax Melts em cera vegetal, à mão.
-foto: sara-1
+foto: sara-3
 ---
 Tropecei num mundo onde o criar não tem limites, e quis fazê-lo chegar a ti.
 
