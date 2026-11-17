@@ -1,0 +1,35 @@
+{
+  "nome": "Vela «Mãe» em vidro",
+  "fotos": [
+    "vela-mae-em-vidro-1",
+    "vela-mae-em-vidro-2",
+    "vela-mae-em-vidro-3"
+  ],
+  "resumo": "Vela em frasco de vidro com tampa de madeira e «Mãe», com aroma de jasmim e sândalo.",
+  "descricao": "Uma combinação minimalista de vidro, cera e o aroma delicado de jasmim e sândalo, para ser um detalhe de calma no dia de quem nos dá tudo. Pode ir com a vela em forma de laço, ou sozinha.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [
+    {
+      "nome": "Conjunto",
+      "valores": [
+        {
+          "nome": "Só o frasco"
+        },
+        {
+          "nome": "Frasco e vela laço"
+        }
+      ]
+    }
+  ],
+  "personalizacao": {},
+  "quantidadeMinima": 1,
+  "video": "vela-mae-em-vidro",
+  "categoria": "velas",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 7
+}

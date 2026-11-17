@@ -1,0 +1,23 @@
+{
+  "nome": "Marcadores de livros",
+  "fotos": [
+    "marcadores-de-livros-1",
+    "marcadores-de-livros-2",
+    "marcadores-de-livros-3"
+  ],
+  "resumo": "Marcadores magnéticos ilustrados, para cada tipo de leitora.",
+  "descricao": "Cada livro merece um companheiro à altura. Marcadores magnéticos, que se prendem à página sem a estragar, com ilustrações para cada gosto.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {},
+  "quantidadeMinima": 1,
+  "video": "",
+  "categoria": "personalizados",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 5
+}

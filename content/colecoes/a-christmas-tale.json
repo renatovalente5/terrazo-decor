@@ -1,0 +1,28 @@
+{
+  "titulo": "A Christmas Tale",
+  "epoca": "Natal",
+  "quando": "Natal 2026",
+  "resumo": "Soldadinhos, postais com floco de neve e saquinhos com flores secas: a magia do Natal, peça a peça.",
+  "texto": "Há peças que não precisam de muito para nos transportar para uma história de Natal. A coleção deste ano começou com uma vela-pilar com um soldadinho em relevo — e é apenas o começo.\n\nOs soldadinhos são uma paixão que começou no Natal passado. Os postais vieram do Pólo Norte para fazer parte do Natal de quem, ao longo do ano, tornou os nossos dias mais bonitos.",
+  "fotos": [
+    "natal-carta",
+    "soldadinhos-2",
+    "postal-com-vela-de-natal-2",
+    "saquinho-de-natal-2",
+    "vela-soldadinho-em-relevo-2",
+    "postal-com-vela-de-natal-3",
+    "soldadinhos-3"
+  ],
+  "produtos": [
+    "soldadinhos",
+    "vela-soldadinho-em-relevo",
+    "saquinho-de-natal",
+    "postal-com-vela-de-natal",
+    "estrela-de-natal-com-nome",
+    "caixinha-de-natal",
+    "wax-melts"
+  ],
+  "destaque": true,
+  "ordem": 1,
+  "publicado": true
+}

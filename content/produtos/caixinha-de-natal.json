@@ -1,0 +1,22 @@
+{
+  "nome": "Caixinha de Natal",
+  "fotos": [
+    "caixinha-de-natal-1",
+    "caixinha-de-natal-2"
+  ],
+  "resumo": "Uma caixinha com janela e Wax Melts com aroma a bolachas de gengibre.",
+  "descricao": "O combo maravilha: uma caixinha pronta para surpreender quem não resiste a uma dose de fofura natalícia, com Wax Melts em forma de bolacha e o aroma irresistível a bolachinhas de gengibre.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {},
+  "quantidadeMinima": 1,
+  "video": "",
+  "categoria": "wax-melts",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 4
+}

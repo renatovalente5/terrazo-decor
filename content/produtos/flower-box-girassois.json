@@ -1,0 +1,41 @@
+{
+  "nome": "Flower Box de girassóis",
+  "fotos": [
+    "flower-box-girassois-1",
+    "flower-box-girassois-2",
+    "flower-box-girassois-4",
+    "flower-box-girassois-3"
+  ],
+  "resumo": "Girassóis e flores brancas em cera, num papel cor de areia, com o nome a dourado.",
+  "descricao": "Uma caixa cheia de sol: girassóis em cera, flores brancas e flores secas, com o nome de quem a recebe. Também vai num saco de oferta com janela.\n\nAs flores são velas: para as acender, tira-se a flor do palito e põe-se num pratinho resistente ao calor, ou a flutuar num copo com água. Também se podem derreter num queimador, como Wax Melts. Nunca se acendem no arranjo.",
+  "preco": 9,
+  "desde": true,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [
+    {
+      "nome": "Tamanho",
+      "valores": [
+        {
+          "nome": "Pequena (9 €)"
+        },
+        {
+          "nome": "Grande (18 €)"
+        }
+      ]
+    }
+  ],
+  "personalizacao": {
+    "nome": true,
+    "frase": true,
+    "rotuloNome": "Nome na caixa",
+    "rotuloFrase": "Cores, ocasião ou mensagem"
+  },
+  "quantidadeMinima": 1,
+  "video": "",
+  "categoria": "flower-boxes",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 2
+}

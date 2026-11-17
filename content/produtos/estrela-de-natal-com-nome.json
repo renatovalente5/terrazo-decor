@@ -1,0 +1,24 @@
+{
+  "nome": "Estrela de Natal com nome",
+  "fotos": [
+    "estrela-de-natal-com-nome-1"
+  ],
+  "resumo": "Uma estrela transparente para a árvore, com a inicial e o nome.",
+  "descricao": "Simples e cheia de significado: uma estrela para a árvore de Natal com a inicial e o nome de cada um lá de casa.",
+  "preco": 2.5,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {
+    "nome": true,
+    "rotuloNome": "Nome"
+  },
+  "quantidadeMinima": 1,
+  "video": "",
+  "categoria": "personalizados",
+  "novidade": true,
+  "publicado": true,
+  "ordem": 2
+}

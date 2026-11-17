@@ -1,0 +1,28 @@
+{
+  "nome": "Quadro de flores",
+  "fotos": [
+    "quadro-de-flores-1",
+    "quadro-de-flores-2",
+    "quadro-de-flores-3"
+  ],
+  "resumo": "Um quadro cheio de rosas de cera, com uma frase e uma data.",
+  "descricao": "Um presente para guardar as memórias de um dia especial: rosas de cera nas cores que escolheres e uma frase com a data. Este foi para um casamento e batizado — «Um dia, dois motivos».",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {
+    "data": true,
+    "frase": true,
+    "rotuloData": "Data",
+    "rotuloFrase": "Frase e cores"
+  },
+  "quantidadeMinima": 1,
+  "video": "",
+  "categoria": "personalizados",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 1
+}

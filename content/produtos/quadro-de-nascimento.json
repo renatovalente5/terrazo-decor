@@ -1,0 +1,27 @@
+{
+  "nome": "Quadro de nascimento",
+  "fotos": [
+    "quadro-de-nascimento-1",
+    "quadro-de-nascimento-2"
+  ],
+  "resumo": "Um quadro em relevo com o nome do bebé, para receber quem acabou de chegar.",
+  "descricao": "O nascimento de um bebé é um daqueles momentos que nos fazem parar e sentir. Este quadro, com um balão de ar quente em relevo e o nome, foi feito para dar as boas-vindas à Luana.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {
+    "nome": true,
+    "data": true,
+    "rotuloNome": "Nome do bebé",
+    "rotuloData": "Data de nascimento"
+  },
+  "quantidadeMinima": 1,
+  "video": "",
+  "categoria": "personalizados",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 4
+}

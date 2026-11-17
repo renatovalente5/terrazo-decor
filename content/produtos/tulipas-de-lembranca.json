@@ -1,0 +1,25 @@
+{
+  "nome": "Tulipas de lembrança",
+  "fotos": [
+    "tulipas-de-lembranca-1",
+    "tulipas-de-lembranca-2"
+  ],
+  "resumo": "Tulipas de cera em tons pastel, embrulhadas com laço e etiqueta, para eventos.",
+  "descricao": "Foram lembranças para um evento do Dia da Mãe sobre a importância de cuidarmos de nós: tulipas de cera em tons pastel, embrulhadas com laço e uma etiqueta com a mensagem.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {
+    "frase": true,
+    "rotuloFrase": "Mensagem da etiqueta"
+  },
+  "quantidadeMinima": 10,
+  "video": "tulipas-de-lembranca",
+  "categoria": "lembrancas",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 3
+}

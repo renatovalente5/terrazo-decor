@@ -1,0 +1,27 @@
+{
+  "nome": "Bandeja folha de ginkgo",
+  "fotos": [
+    "bandeja-folha-de-ginkgo-1",
+    "bandeja-folha-de-ginkgo-2"
+  ],
+  "resumo": "Bandeja em Jesmonite em forma de folha de ginkgo, com 18 cm e a borda dourada.",
+  "descricao": "Uma folha de ginkgo para guardar anéis, chaves ou uma vela pequena. Feita em Jesmonite, pintada e com a borda dourada à mão.",
+  "preco": 7.5,
+  "desde": false,
+  "inclui": [],
+  "medidas": [
+    {
+      "rotulo": "Comprimento",
+      "valor": "18 cm"
+    }
+  ],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {},
+  "quantidadeMinima": 1,
+  "video": "",
+  "categoria": "jesmonite",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 1
+}

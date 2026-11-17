@@ -1,0 +1,26 @@
+{
+  "nome": "Mini flower boxes",
+  "fotos": [
+    "mini-flower-boxes-1",
+    "mini-flower-boxes-2",
+    "mini-flower-boxes-3"
+  ],
+  "resumo": "Flower boxes pequenas com um cartão, para despedidas, eventos e datas especiais.",
+  "descricao": "Porque o trabalho também é feito de pessoas: mini flower boxes com um cartão escrito, para dizer «boa sorte», «obrigada» ou «parabéns» a uma equipa inteira.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {
+    "frase": true,
+    "rotuloFrase": "Mensagem do cartão"
+  },
+  "quantidadeMinima": 5,
+  "video": "",
+  "categoria": "lembrancas",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 5
+}

@@ -1,0 +1,26 @@
+{
+  "nome": "Coffret à tua medida",
+  "fotos": [
+    "coffret-a-tua-medida-1",
+    "coffret-a-tua-medida-2",
+    "coffret-a-tua-medida-3"
+  ],
+  "resumo": "Uma caixa de oferta para abrandar: o chá favorito, uma luz suave e um aroma. Tu escolhes as peças.",
+  "descricao": "Mais do que uma caixa, um convite a abrandar: preparar o chá favorito, acender uma luz suave, escolher um aroma e reservar um bocadinho do dia só para ti.\n\nJá tens queimador? Escolhe outra caixa de Wax Melts. Preferes uma caneca? Ou uma vela decorativa? Tu escolhes as peças, eu junto tudo.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {
+    "frase": true,
+    "rotuloFrase": "O que queres no coffret"
+  },
+  "quantidadeMinima": 1,
+  "video": "coffret-a-tua-medida",
+  "categoria": "coffrets",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 1
+}

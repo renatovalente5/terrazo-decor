@@ -1,0 +1,24 @@
+{
+  "nome": "Postal com vela de Natal",
+  "fotos": [
+    "postal-com-vela-de-natal-1",
+    "postal-com-vela-de-natal-2",
+    "postal-com-vela-de-natal-3",
+    "postal-com-vela-de-natal-4"
+  ],
+  "resumo": "Um postal de Natal com uma vela em forma de floco de neve: o «lembrei-me de ti» desta época.",
+  "descricao": "Vieram do Pólo Norte para fazer parte do Natal de quem, ao longo do ano, tornou os nossos dias mais bonitos. O floco de neve é uma vela de cera vegetal, e o postal diz «Feliz Natal — que a paz e a luz estejam sempre presentes».",
+  "preco": 3,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {},
+  "quantidadeMinima": 1,
+  "video": "",
+  "categoria": "velas",
+  "novidade": true,
+  "publicado": true,
+  "ordem": 4
+}

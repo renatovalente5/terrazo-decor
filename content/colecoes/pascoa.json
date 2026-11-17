@@ -1,0 +1,18 @@
+{
+  "titulo": "Páscoa",
+  "epoca": "Páscoa",
+  "quando": "Abril 2026",
+  "resumo": "Ovos da Páscoa em cera com aroma, num ninho de palha: uma edição limitada.",
+  "texto": "Esta edição limitada é um convite para um ritual de conforto e serenidade. Não há chocolates, mas há aromas que abraçam e aquecem o coração.",
+  "fotos": [
+    "ovos-da-pascoa-2",
+    "flores-de-cera-3"
+  ],
+  "produtos": [
+    "ovos-da-pascoa",
+    "flores-de-cera"
+  ],
+  "destaque": false,
+  "ordem": 5,
+  "publicado": true
+}

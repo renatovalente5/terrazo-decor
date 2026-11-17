@@ -1,0 +1,28 @@
+{
+  "nome": "Corações de lembrança",
+  "fotos": [
+    "coracoes-de-bodas-1",
+    "coracoes-de-bodas-3",
+    "coracoes-de-bodas-2"
+  ],
+  "resumo": "Corações de cera em caixinhas com selo de lacre e etiqueta, para casamentos e bodas.",
+  "descricao": "O amor merece ser celebrado: corações de cera com relevo, em caixinhas brancas com flores secas, selo de lacre e uma etiqueta com as iniciais e a data.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {
+    "nome": true,
+    "data": true,
+    "rotuloNome": "Nomes ou iniciais",
+    "rotuloData": "Data"
+  },
+  "quantidadeMinima": 10,
+  "video": "",
+  "categoria": "lembrancas",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 1
+}

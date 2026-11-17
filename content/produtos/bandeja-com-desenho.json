@@ -1,0 +1,24 @@
+{
+  "nome": "Bandeja com o desenho dos filhos",
+  "fotos": [
+    "bandeja-com-desenho-1"
+  ],
+  "resumo": "O desenho preferido dos teus filhos, em vinil, numa bandeja de Jesmonite.",
+  "descricao": "Os desenhos deles são preciosos demais para ficarem guardados numa gaveta. Mandas-me uma fotografia do desenho e eu passo-o para uma bandeja em Jesmonite, para ficar à vista.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {
+    "frase": true,
+    "rotuloFrase": "Conta-me o desenho (mandas a fotografia na conversa)"
+  },
+  "quantidadeMinima": 1,
+  "video": "",
+  "categoria": "jesmonite",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 5
+}

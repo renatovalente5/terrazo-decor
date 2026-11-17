@@ -1,0 +1,40 @@
+{
+  "nome": "Flower Box em tons nude",
+  "fotos": [
+    "flower-box-tons-nude-1",
+    "flower-box-tons-nude-2",
+    "flower-box-tons-nude-3"
+  ],
+  "resumo": "Peónias, rosas e margaridas em cera em rosa, lilás e areia.",
+  "descricao": "Os tons mais suaves: rosa, lilás, branco e areia, com peónias, rosas e flores secas, e um laço a fechar.\n\nAs flores são velas: para as acender, tira-se a flor do palito e põe-se num pratinho resistente ao calor, ou a flutuar num copo com água. Também se podem derreter num queimador, como Wax Melts. Nunca se acendem no arranjo.",
+  "preco": 9,
+  "desde": true,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [
+    {
+      "nome": "Tamanho",
+      "valores": [
+        {
+          "nome": "Pequena (9 €)"
+        },
+        {
+          "nome": "Grande (18 €)"
+        }
+      ]
+    }
+  ],
+  "personalizacao": {
+    "nome": true,
+    "frase": true,
+    "rotuloNome": "Nome na caixa",
+    "rotuloFrase": "Cores, ocasião ou mensagem"
+  },
+  "quantidadeMinima": 1,
+  "video": "",
+  "categoria": "flower-boxes",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 5
+}

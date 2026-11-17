@@ -1,0 +1,483 @@
+#!/usr/bin/env node
+// Gera o site da Terrazo.Decor em _site/, a partir de content/ e media/. Node 22, sem dependências.
+// O aspeto é o da proposta A, «Linho» (escolhida pelo Renato a 17 nov 2026: o fundo de linho do próprio
+// logótipo, títulos serifados em itálico, fotografias grandes de cantos redondos); por baixo, a
+// infraestrutura dos outros sites do Renato: as regras dos dados (src/lib/regras.mjs, as mesmas do painel),
+// as imagens do scripts/imagens.py, a biblioteca legal-comum e as guardas do fim.
+//
+//   node scripts/build.mjs                         local, em http://localhost:4992/
+//   node scripts/build.mjs --base=/terrazo-decor   pré-visualização no GitHub Pages
+//   node scripts/build.mjs --dominio               o domínio ANTES de abrir: na raiz, com o _headers,
+//                                                  mas fechado aos motores de busca
+//   node scripts/build.mjs --producao              o domínio aberto: aos motores de busca, e RECUSA
+//                                                  publicar com dados legais por preencher
+//   node scripts/build.mjs --sem-imagens           não corre o scripts/imagens.py (usa a cache)
+//
+// Os textos que a lei manda ter certos (identificação, NIF, morada, contactos, prazos) vêm todos de
+// content/site.json por marcadores ({{email}}, {{empresa.identificacao}}…): nunca escritos à mão nas
+// páginas, para não envelhecerem num sítio e ficarem certos noutro.
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { esc, hojeEmLisboa, markdown, moradaCompleta } from '../src/templates/util.mjs';
+import { pagina } from '../src/templates/layout.mjs';
+import * as R from '../src/lib/regras.mjs';
+import * as paginas from '../src/templates/paginas.mjs';
+import { pecaLegal } from '../src/templates/componentes.mjs';
+import { livroCss, destinatariosHtml, CATALOGO_DESTINATARIOS, frasesPrivacidade, prazos as PRAZOS_LEGAIS, verificarIdentificacao, verificarProduto, contraste, VERSAO as LEGAL_COMUM_VERSAO } from '../legal-comum/index.mjs';
+
+const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const args = process.argv.slice(2);
+// --conteudo=<pasta> e --saida=<pasta>: para as baterias e o ensaio do painel gerarem o site a partir
+// de outro conteúdo (o media/, os modelos e a cache das imagens são sempre os daqui).
+const CONTEUDO = path.resolve(args.find((a) => a.startsWith('--conteudo='))?.slice(11) || path.join(RAIZ, 'content'));
+const SAIDA = path.resolve(args.find((a) => a.startsWith('--saida='))?.slice(8) || path.join(RAIZ, '_site'));
+const producao = args.includes('--producao');
+const dominio = producao || args.includes('--dominio');
+const base = dominio ? '' : (args.find((a) => a.startsWith('--base='))?.slice(7) || '').replace(/\/$/, '');
+const semImagens = args.includes('--sem-imagens');
+
+// O domínio ainda não existe (a Sara ainda não o escolheu): o canonical, o sitemap e os cartões de partilha
+// seguem-no quando houver. Até lá, a pré-visualização.
+const DOMINIO = process.env.DOMINIO || 'terrazodecor.pt';
+const ORIGEM = dominio ? `https://${DOMINIO}` : (base ? 'https://renatovalente5.github.io' : 'http://localhost:4992');
+
+const erros = [];
+const avisos = [];
+// NO GITHUB ACTIONS, CADA PROBLEMA VAI TAMBÉM COMO ANOTAÇÃO (::error / ::warning): é o que o painel lê
+// para dizer aos donos porque é que a publicação parou, com a ligação para o ecrã onde se corrige.
+const NO_CI = process.env.GITHUB_ACTIONS === 'true';
+const escaparDados = (s) => String(s).replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A');
+const escaparPropriedade = (s) => escaparDados(s).replace(/:/g, '%3A').replace(/,/g, '%2C');
+function anotar(nivel, texto) {
+  if (!NO_CI) return;
+  const m = /^([^:]{3,80}?): (.+)$/s.exec(String(texto));
+  console.log(m ? `::${nivel} title=${escaparPropriedade(m[1])}::${escaparDados(m[2])}` : `::${nivel}::${escaparDados(texto)}`);
+}
+function parar(titulo, lista, { tecnico = false } = {}) {
+  console.error(`\n${titulo}\n`);
+  for (const e of lista) console.error(`  ✗ ${e}`);
+  for (const e of [...new Set(lista)].slice(0, 10)) anotar('error', tecnico ? `${e} (Só o Renato pode corrigir.)` : e);
+  process.exit(1);
+}
+const existe = (rel) => fs.existsSync(path.join(RAIZ, rel));
+
+// ---------------------------------------------------------------- conteúdo e regras
+const listar = (rel, ext) => (fs.existsSync(path.join(RAIZ, rel)) ? fs.readdirSync(path.join(RAIZ, rel)).filter((f) => f.endsWith(ext)).map((f) => f.slice(0, -ext.length)) : []);
+const lerTexto = (rel) => fs.readFileSync(path.join(CONTEUDO, rel.replace(/^content\//, '')), 'utf8');
+const pasta = (sub) => (fs.existsSync(path.join(CONTEUDO, sub)) ? Object.fromEntries(fs.readdirSync(path.join(CONTEUDO, sub)).filter((f) => f.endsWith('.json')).map((f) => [f.slice(0, -5), lerTexto(`content/${sub}/${f}`)])) : {});
+const dadosRegras = {
+  site: lerTexto('content/site.json'),
+  inicio: lerTexto('content/inicio.json'),
+  categorias: lerTexto('content/categorias.json'),
+  fotos: lerTexto('content/fotos.json'),
+  artigos: pasta('produtos'),
+  colecoes: pasta('colecoes'),
+  ficheirosFotos: fs.readdirSync(path.join(RAIZ, 'media/fotos')).filter((f) => f.endsWith('.jpg')).map((f) => f.slice(0, -4)),
+  videos: listar('media/video', '.mp4'),
+};
+const hoje = hojeEmLisboa();
+const listaRegras = R.problemas(dadosRegras, { producao });
+for (const p of listaRegras.filter((x) => x.classe === 'bloqueia')) erros.push(`${p.ecra}: ${p.mensagem}`);
+for (const p of listaRegras.filter((x) => x.classe === 'avisa')) avisos.push(`${p.ecra}: ${p.mensagem}`);
+if (erros.length) parar(`A publicação parou: ${erros.length} ${erros.length === 1 ? 'problema' : 'problemas'} no conteúdo.`, erros);
+const neutro = R.neutralizar(dadosRegras, listaRegras);
+for (const e of neutro.efeitos) {
+  avisos.push(`${e.ficheiro.includes('colecoes') ? 'Coleções' : 'Peças'} › ${e.nome}: ${R.descreverEfeitos(e)} (${e.motivos.join(' ')})`);
+  anotar('warning', `${e.ficheiro.includes('colecoes') ? 'Coleções' : 'Peças'} › ${e.nome}: ${R.descreverEfeitos(e)}.`);
+}
+
+const site = JSON.parse(dadosRegras.site);
+const inicio = JSON.parse(dadosRegras.inicio);
+const categorias = JSON.parse(dadosRegras.categorias);
+const fotos = JSON.parse(dadosRegras.fotos);
+const ordemCat = (p) => { const i = categorias.findIndex((c) => c.slug === p.categoria); return i < 0 ? 999 : i; };
+// As peças como o gerador as lê: a cópia neutralizada (uma peça com problemas sai escondida), pela
+// ordem das categorias e, dentro de cada uma, pela posição.
+const produtos = Object.entries(neutro.artigos)
+  .map(([slug, a]) => ({ slug, ...a }))
+  .filter((p) => p.publicado !== false && Array.isArray(p.fotos) && p.fotos.length)
+  .sort((a, b) => ordemCat(a) - ordemCat(b) || (a.ordem ?? 999) - (b.ordem ?? 999) || a.nome.localeCompare(b.nome, 'pt'));
+const slugsProdutos = new Set(produtos.map((p) => p.slug));
+const colecoes = Object.entries(neutro.colecoes)
+  .map(([slug, c]) => ({ slug, ...c, produtos: (c.produtos || []).filter((s) => slugsProdutos.has(s)) }))
+  .filter((c) => c.publicado !== false && Array.isArray(c.fotos) && c.fotos.length)
+  .sort((a, b) => (a.ordem ?? 999) - (b.ordem ?? 999) || a.titulo.localeCompare(b.titulo, 'pt'));
+const categoriasComPecas = categorias.filter((c) => produtos.some((p) => p.categoria === c.slug));
+
+// ---------------------------------------------------------------- as guardas legais (só avisam)
+{
+  const e = site.empresa || {};
+  const FORMAS = [[/nome individual|\beni\b/i, 'eni'], [/unipessoal/i, 'unipessoal'], [/\blda\b|limitada/i, 'lda'], [/\bs\.?\s?a\b|an[óo]nima/i, 'sa']];
+  const forma = FORMAS.find(([re]) => re.test(e.tipo || ''))?.[1] || (!e.nif ? 'sem-actividade' : undefined);
+  const r = verificarIdentificacao({
+    nome: e.nome, formaJuridica: forma, nif: e.nif,
+    morada: [e.morada, [e.codigoPostal, e.localidade].filter(Boolean).join(' ')].filter(Boolean).join(', '),
+    email: site.contactos?.email, telefone: site.contactos?.telefone || site.contactos?.whatsapp,
+  }, { modo: 'avisar', ecra: 'Dados da marca › Dados legais' });
+  for (const p of r.problemas) avisos.push(`Identificação (${p.campo}): ${p.mensagem}`);
+}
+/* As fichas: muitas peças são por encomenda (sem preço no site, e a peça é feita pela Sara), por isso o aviso
+   do preço não se aplica, e o fabricante é a própria marca (os dados legais dela). As velas, os Wax Melts e os
+   ambientadores são misturas com fragrância (CLP). Os avisos iguais em várias peças juntam-se numa linha só,
+   com quantas são. */
+const avisosFichas = new Map();
+for (const p of produtos) {
+  const e = site.empresa || {};
+  const fab = p.fabricante && p.fabricante.nome ? p.fabricante : { nome: e.nome, morada: [e.morada, e.codigoPostal, e.localidade].filter(Boolean).join(', '), email: site.contactos?.email };
+  const texto = `${p.nome} ${(p.inclui || []).join(' ')}`;
+  const categoria = ['velas', 'wax-melts', 'flower-boxes'].includes(p.categoria) || /\bvelas?\b|wax melts?|ambientador|tea lights?/i.test(texto) ? 'mistura-clp' : 'geral';
+  const r = verificarProduto({ nome: p.nome, preco: p.preco ?? 0, fabricante: fab, referencia: p.referencia, avisos: String(p.avisos || '').split('\n').filter(Boolean), perigos: String(p.perigos || '').split('\n').filter(Boolean), composicao: p.composicao }, { categoria, modo: 'avisar' });
+  for (const x of r.problemas) {
+    if (/sem pre[çc]o/i.test(x.mensagem)) continue;
+    avisosFichas.set(x.mensagem, [...(avisosFichas.get(x.mensagem) || []), p.nome]);
+  }
+}
+for (const [m, nomes] of avisosFichas) avisos.push(`Fichas (${nomes.length} ${nomes.length === 1 ? 'peça' : 'peças'}): ${m}${nomes.length <= 3 ? ` — ${nomes.join(', ')}` : ''}`);
+for (const f of fs.readdirSync(path.join(CONTEUDO, 'paginas'))) {
+  const t = lerTexto(`content/paginas/${f}`);
+  const m = t.match(R.RE_ALEGACOES);
+  if (m) erros.push(`Páginas › ${f}: «${m[0]}» é uma alegação que a lei só deixa fazer com prova (ou uma certificação que não temos). Tire a palavra.`);
+}
+if (erros.length) parar(`A publicação parou: ${erros.length} ${erros.length === 1 ? 'problema' : 'problemas'} no conteúdo.`, erros);
+
+// ---------------------------------------------------------------- os contrastes da paleta
+/* As cores do site (as do logótipo), medidas aqui e não a olho: o texto a 4,5:1 e os contornos dos
+   campos a 3:1. Lêem-se do :root do site.css: mudar uma cor e falhar o mínimo pára a construção. */
+const CSS_FONTE = fs.readFileSync(path.join(RAIZ, 'src/estilos/site.css'), 'utf8');
+{
+  const raiz = CSS_FONTE.slice(CSS_FONTE.indexOf(':root {'), CSS_FONTE.indexOf('}', CSS_FONTE.indexOf(':root {')));
+  const cor = Object.fromEntries([...raiz.matchAll(/--([\w-]+):\s*(#[0-9A-Fa-f]{6})\b/g)].map((m) => [m[1], m[2]]));
+  const PARES = [
+    ['tinta', 'linho', 4.5], ['tinta', 'papel', 4.5], ['tinta', 'branco', 4.5], ['tinta', 'linho-2', 4.5],
+    ['tinta-2', 'linho', 4.5], ['tinta-2', 'papel', 4.5], ['tinta-2', 'linho-2', 4.5], ['tinta-2', 'branco', 4.5],
+    ['caramelo', 'linho', 4.5], ['caramelo', 'papel', 4.5], ['caramelo', 'branco', 4.5],
+    ['linho', 'tinta', 4.5], ['branco', 'caramelo', 4.5],
+    ['linho', 'salva', 4.5], ['areia', 'salva', 4.5],
+    ['erro', 'branco', 4.5], ['erro', 'linho', 4.5], ['linha-campo', 'branco', 3], ['linha-campo', 'linho', 3],
+  ];
+  const falham = [];
+  for (const [a, b, min] of PARES) {
+    if (!cor[a] || !cor[b]) { falham.push(`Gerador: a cor --${!cor[a] ? a : b} não está no :root do site.css`); continue; }
+    const r = contraste(cor[a], cor[b]);
+    if (r < min) falham.push(`Gerador: --${a} sobre --${b} tem ${r}:1 (o mínimo é ${min}:1)`);
+  }
+  if (falham.length) parar('A publicação parou: as cores do site não têm contraste que chegue.', falham, { tecnico: true });
+}
+
+// ---------------------------------------------------------------- imagens
+if (!semImagens) execFileSync('python3', [path.join(RAIZ, 'scripts/imagens.py')], { stdio: 'inherit' });
+const manifesto = JSON.parse(fs.readFileSync(path.join(RAIZ, '.cache/imagens/manifesto.json'), 'utf8'));
+const semVersoes = Object.keys(fotos).filter((f) => dadosRegras.ficheirosFotos.includes(f) && !manifesto.fotos[f]);
+if (semVersoes.length) parar('A publicação parou: faltam as versões web de fotografias.', semVersoes.map((f) => `Fotografias: «${f}» não tem as versões web (scripts/imagens.py)`), { tecnico: true });
+if (!manifesto.logo) parar('A publicação parou: falta o logótipo.', ['Gerador: media/marca/logo.png não tem as versões pequenas (scripts/imagens.py)'], { tecnico: true });
+
+// ---------------------------------------------------------------- saída
+fs.rmSync(SAIDA, { recursive: true, force: true });
+fs.mkdirSync(path.join(SAIDA, 'assets/img'), { recursive: true });
+const copiar = (de, para) => { fs.mkdirSync(path.dirname(para), { recursive: true }); fs.copyFileSync(de, para); };
+const resumo = (buf) => crypto.createHash('sha256').update(buf).digest('hex').slice(0, 10);
+for (const f of fs.readdirSync(path.join(RAIZ, '.cache/imagens'))) {
+  if (f !== 'manifesto.json' && !f.endsWith('.resumo')) copiar(path.join(RAIZ, '.cache/imagens', f), path.join(SAIDA, 'assets/img', f));
+}
+for (const f of fs.readdirSync(path.join(RAIZ, 'src/fontes'))) copiar(path.join(RAIZ, 'src/fontes', f), path.join(SAIDA, 'assets/fontes', f));
+
+// o aviso oficial da garantia: byte a byte o da Comissão (media/legal/LEIA.md)
+const AVISO_SHA = {
+  'aviso-garantia-legal-pt.svg': '9069bb0bc5e9f3cf655579038be5646181cc5447a25f3f8ccf2d018eacba0ac1',
+  'aviso-garantia-legal-pt.pdf': 'b145a3014984f474d9bb81c60b5a492a376e64e55695eb089f0554adaa752877',
+};
+for (const [f, sha] of Object.entries(AVISO_SHA)) {
+  const buf = fs.readFileSync(path.join(RAIZ, 'media/legal', f));
+  if (crypto.createHash('sha256').update(buf).digest('hex') !== sha) parar('A publicação parou: o aviso da garantia foi alterado.', [`Garantia: media/legal/${f} foi alterado, e o aviso oficial da garantia não se pode editar`], { tecnico: true });
+  copiar(path.join(RAIZ, 'media/legal', f), path.join(SAIDA, 'assets/legal', f));
+}
+const AVISO_ALT = 'GARANTIA LEGAL. Proteção da garantia legal mínima de dois anos para os bens vendidos na União Europeia. Os consumidores podem invocar os seus direitos ao abrigo da garantia legal de conformidade, por exemplo, se os bens: não corresponderem à descrição; não funcionarem como previsto. Os vendedores são responsáveis por qualquer falta de conformidade que exista no momento em que os bens forem entregues e se manifeste no período de garantia legal. Os vendedores nessa situação estão obrigados a oferecer: reparação gratuita ou substituição gratuita; em alguns casos, redução do preço ou reembolso integral. Alguns países têm um período de garantia legal mais longo. Para os bens em segunda mão, pode aplicar-se um período mais curto, mas não inferior a um ano. Para mais informações sobre os seus direitos num determinado país, digitalize o código QR abaixo ou consulte o vendedor. europa.eu/youreurope/garantias. O que fazer se receber bens não conformes: 1. Contactar o vendedor o mais rapidamente possível para expor o problema; 2. Apresentar uma prova de compra, como um recibo, uma fatura ou um extrato bancário. Os vendedores e os produtores também podem oferecer garantias comerciais, que se aplicam independentemente da garantia legal. Por exemplo, pode ver este rótulo GARAN, que representa uma garantia comercial de durabilidade oferecida pelo produtor sem custos adicionais e cobrindo a totalidade do bem.';
+
+// os vídeos das fichas (media/video/): nome com resumo, para a cache de um ano nunca servir um antigo
+const ficheirosVideo = {};
+for (const nome of listar('media/video', '.mp4')) {
+  const buf = fs.readFileSync(path.join(RAIZ, 'media/video', `${nome}.mp4`));
+  ficheirosVideo[nome] = `video/${nome}-${resumo(buf)}.mp4`;
+  copiar(path.join(RAIZ, 'media/video', `${nome}.mp4`), path.join(SAIDA, 'assets', ficheirosVideo[nome]));
+}
+
+// CSS e JS: um ficheiro cada, com o resumo no nome. A folha de estilos leva primeiro o CSS do Livro de
+// Reclamações da legal-comum (a variante discreta): as regras do rodapé vêm depois e ganham.
+const css = Buffer.from(`/* legal-comum v${LEGAL_COMUM_VERSAO}: o Livro de Reclamações */\n${livroCss()}\n${CSS_FONTE}`);
+const ORDEM_JS = ['nucleo.js', 'interface.js', 'procura.js', 'pedido.js'];
+const soltos = fs.readdirSync(path.join(RAIZ, 'src/scripts')).filter((f) => f.endsWith('.js') && !ORDEM_JS.includes(f));
+if (soltos.length) parar('A publicação parou: há scripts fora da lista.', soltos.map((f) => `Gerador: src/scripts/${f} não está em ORDEM_JS (scripts/build.mjs)`), { tecnico: true });
+const js = Buffer.from(ORDEM_JS.map((f) => `// ${f}\n${fs.readFileSync(path.join(RAIZ, 'src/scripts', f), 'utf8')}`).join('\n'));
+const ficheiros = { css: `site-${resumo(css)}.css`, js: `site-${resumo(js)}.js`, videos: ficheirosVideo };
+fs.writeFileSync(path.join(SAIDA, 'assets', ficheiros.css), css);
+fs.writeFileSync(path.join(SAIDA, 'assets', ficheiros.js), js);
+
+// ---------------------------------------------------------------- as páginas que vão existir
+const PAGINAS_MD = fs.readdirSync(path.join(CONTEUDO, 'paginas')).filter((x) => x.endsWith('.md'));
+const caminhos = new Set([
+  '/', '/loja/', '/colecoes/', '/contactos/', '/pedido/',
+  ...categoriasComPecas.map((c) => `/loja/${c.slug}/`),
+  ...produtos.map((p) => `/pecas/${p.slug}/`),
+  ...colecoes.map((c) => `/colecoes/${c.slug}/`),
+  ...PAGINAS_MD.map((f) => `/${f.replace(/\.md$/, '')}/`),
+]);
+
+// ---------------------------------------------------------------- contexto dos modelos
+const ctx = {
+  site, inicio, categorias, categoriasComPecas, produtos, colecoes, fotos, manifesto, hoje, producao, ficheiros,
+  url: (c) => (/^https?:|^mailto:|^tel:|^#/.test(c) ? c : `${base}${c}`),
+  asset: (rel) => `${base}/assets/${rel}`,
+  absoluto: (c) => `${ORIGEM}${base}${c}`,
+  existe: (c) => caminhos.has(String(c || '').split(/[?#]/)[0]),
+  marcador: (desc) => `<mark class="por-confirmar">[por confirmar: ${esc(desc)}]</mark>`,
+};
+if (inicio.capa && inicio.capa.ligacao && !ctx.existe(inicio.capa.ligacao)) avisos.push(`Página inicial › A capa: o botão leva a ${inicio.capa.ligacao}, que não existe: vai para a loja.`);
+
+// ---------------------------------------------------------------- catálogo (pedido e procura)
+/* O que o browser lê (assets/catalogo-*.json): o nome, a frase, as escolhas e os campos da
+   personalização de cada peça, a fotografia e a categoria, e os contactos para onde se envia o
+   pedido. O pedido nunca guarda nomes nem fotografias: lê-os sempre daqui. */
+const fotoDoCatalogo = (f) => {
+  const m = manifesto.fotos[f];
+  return { n: f, r: m.resumo, l: m.larguras, w: m.largura, h: m.altura, foco: fotos[f]?.foco || '50% 50%' };
+};
+const catalogo = {
+  v: 1,
+  marca: site.marca,
+  email: site.contactos.email || '',
+  instagram: site.contactos.instagram || '',
+  whatsapp: R.eTelemovel(site.contactos.whatsapp) ? `351${R.numeroPortugues(site.contactos.whatsapp)}` : '',
+  assets: ctx.asset(''),
+  origem: ORIGEM,   // com o url de cada peça (que já leva a base) dá a ligação completa
+  pedido: ctx.url('/pedido/'),
+  loja: ctx.url('/loja/'),
+  categorias: categoriasComPecas.map((c) => ({ slug: c.slug, nome: c.nome, url: ctx.url(`/loja/${c.slug}/`) })),
+  produtos: Object.fromEntries(produtos.map((p) => {
+    const c = categorias.find((k) => k.slug === p.categoria);
+    return [p.slug, {
+      nome: p.nome, url: ctx.url(`/pecas/${p.slug}/`), resumo: p.resumo || '', preco: R.precoDe(p).valor, desde: R.precoDe(p).desde,
+      cat: p.categoria, catNome: c ? c.nome : '',
+      opcoes: R.opcoesDe(p).map((g) => ({ nome: g.nome, valores: g.valores.map((v) => v.nome) })),
+      pers: R.personalizacaoDe(p), minimo: R.quantidadeMinimaDe(p),
+      img: fotoDoCatalogo(p.fotos[0]),
+    }];
+  })),
+};
+const catalogoBuf = Buffer.from(JSON.stringify(catalogo));
+ficheiros.catalogo = `catalogo-${resumo(catalogoBuf)}.json`;
+fs.writeFileSync(path.join(SAIDA, 'assets', ficheiros.catalogo), catalogoBuf);
+
+// ---------------------------------------------------------------- marcadores das páginas de texto
+/* Na pré-visualização, o que falta dizer leva a marca «[por confirmar: …]»; no domínio aberto, as
+   regras já pararam a construção antes do que a lei pede, e o resto diz «a confirmar». */
+const porConfirmar = (desc, emProducao = 'a confirmar') => (producao ? esc(emProducao) : ctx.marcador(desc));
+
+function identificacao() {
+  const e = site.empresa;
+  const partes = [];
+  partes.push(e.nome ? `<strong>${esc(e.nome)}</strong>` : ctx.marcador('o nome da empresa ou do empresário'));
+  if (e.tipo) partes.push(esc(e.tipo.charAt(0).toLowerCase() + e.tipo.slice(1)));
+  if (e.nif) partes.push(`NIF ${esc(e.nif)}`);
+  else if (!producao) partes.push(`NIF ${ctx.marcador('o NIF')}`);
+  const resto = moradaCompleta(e);
+  if (e.morada) partes.push(`com morada em ${esc(resto)}`);
+  else if (resto) partes.push(`com morada em ${producao ? esc(resto) : `${ctx.marcador('a rua, o número e o código postal')}, ${esc(resto)}`}`);
+  else partes.push(`com morada em ${ctx.marcador('a morada')}`);
+  return `${partes.join(', ')}, que vende com a marca ${esc(site.marca)}.`;
+}
+
+const CONFIG_PRIVACIDADE = {
+  alojamento: dominio ? 'cloudflare' : 'github-pages', dns: dominio ? 'cloudflare' : undefined, email: site.contactos.email ? 'google' : undefined,
+  instagram: Boolean(site.contactos.instagram), facebookPage: Boolean(site.contactos.facebook), whatsapp: Boolean(site.contactos.whatsapp),
+  manutencao: { nome: 'Renato Valente', papel: 'subcontratante' },
+  repositorioPublico: true,
+};
+const TRANSFERENCIA = { DPF: 'EUA: consta da lista do Data Privacy Framework (decisão de adequação da Comissão Europeia)', UE: 'Sem transferência: os dados ficam na União Europeia' };
+function destinatariosComExtras() {
+  const html = destinatariosHtml(CONFIG_PRIVACIDADE);
+  if (!dominio) return html;   // no GitHub Pages o GitHub já lá está, como alojamento
+  const d = CATALOGO_DESTINATARIOS.github;
+  const extra = `<tr><td>${esc(d.nome)}</td><td>${esc('código do site e publicação automática (GitHub Actions): não leva dados de clientes')}</td><td>${esc(d.pais)}</td><td>${esc(TRANSFERENCIA[d.transferencia] || 'Por confirmar')}</td></tr>`;
+  return html.replace('</tbody>', `${extra}\n</tbody>`);
+}
+
+function resolverMarcadores(fonte, onde) {
+  const c = site.contactos;
+  const p = site.pedido || {};
+  /* Cada marcador vira um «token» (o HTML só entra depois do markdown, para não ser mexido). Os de BLOCO (o
+     quadro, a lista, os parágrafos e a figura) saem do <p> em que o markdown os pôs; os de texto ficam
+     dentro dele (um parágrafo que era só «{{pagamento}}» saía sem <p> e colava-se ao seguinte). */
+  const tokens = [];
+  const guardar = (html, bloco = false) => { tokens.push({ html, bloco }); return `\u0000${tokens.length - 1}\u0000`; };
+  const valores = {
+    marca: () => guardar(esc(site.marca)),
+    localidade: () => guardar(site.local.localidade ? esc(site.local.localidade) : ctx.marcador('a localidade')),
+    instagram: () => (c.instagram ? guardar(`<a href="https://www.instagram.com/${esc(c.instagram)}/" target="_blank" rel="noopener">Instagram (@${esc(c.instagram)})</a>`) : guardar(ctx.marcador('o Instagram'))),
+    email: () => (c.email ? guardar(`<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>`) : guardar(ctx.marcador('o email'))),
+    /* Os contactos: o Instagram (por onde chegam as encomendas), o email, o Facebook (e o WhatsApp, quando
+       houver: só a ligação). */
+    contactos: () => guardar([
+      c.instagram ? `<a href="https://www.instagram.com/${esc(c.instagram)}/" target="_blank" rel="noopener">Instagram (@${esc(c.instagram)})</a>` : '',
+      c.email ? `<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>` : ctx.marcador('o email'),
+      c.facebook ? `<a href="https://www.facebook.com/${esc(c.facebook)}" target="_blank" rel="noopener">Facebook</a>` : '',
+      R.eTelemovel(c.whatsapp) ? `<a href="https://wa.me/351${R.numeroPortugues(c.whatsapp)}" target="_blank" rel="noopener">WhatsApp</a>` : '',
+    ].filter(Boolean).join(' · ')),
+    'empresa.identificacao': () => guardar(identificacao()),
+    'empresa.iva': () => guardar(site.empresa.iva ? esc(site.empresa.iva) : porConfirmar('se os preços incluem IVA ou se há isenção', '')),
+    prazo: () => guardar(p.prazo ? esc(p.prazo) : ctx.marcador('os prazos')),
+    pagamento: () => guardar(p.pagamento ? esc(p.pagamento) : ctx.marcador('as formas de pagamento')),
+    levantamento: () => guardar(p.levantamento ? esc(p.levantamento) : porConfirmar('onde e como se combinam as entregas em mão', '')),
+    envio: () => guardar(p.envio ? esc(p.envio) : porConfirmar('como se faz o envio (CTT?) e para onde', '')),
+    portes: () => guardar(p.portes ? esc(p.portes) : porConfirmar('os portes (ou como se calculam)', 'Os portes, quando há envio, vão na confirmação da encomenda.')),
+    'privacidade.destinatarios': () => guardar(pecaLegal('privacidade-destinatarios', `<div class="quadro" tabindex="0" role="region" aria-label="Quem recebe os dados">${destinatariosComExtras()}</div>`), true),
+    'privacidade.prazos': () => guardar(pecaLegal('privacidade-prazos', `<ul>${[
+      'Pedidos que não chegam a encomenda: 12 meses depois da última mensagem.',
+      'Conversas e dados de uma encomenda: enquanto forem precisos para ela e para a garantia, até 3 anos depois da entrega.',
+      'Faturas e dados de faturação: 10 anos, por obrigação fiscal (artigo 52.º do Código do IVA).',
+      PRAZOS_LEGAIS.registosTecnicos.texto,
+    ].map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`), true),
+    'privacidade.frases': () => guardar(pecaLegal('privacidade-frases', frasesPrivacidade(CONFIG_PRIVACIDADE).map((t) => `<p>${esc(t)}</p>`).join('')), true),
+    avisoGarantia: () => guardar(`<figure class="aviso-garantia"><img src="${ctx.asset('legal/aviso-garantia-legal-pt.svg')}" width="600" height="848" alt="${esc(AVISO_ALT)}" loading="lazy" decoding="async"><figcaption><a href="${ctx.asset('legal/aviso-garantia-legal-pt.pdf')}">Descarregar o aviso oficial (PDF)</a> · <a href="https://europa.eu/youreurope/garantias" target="_blank" rel="noopener">europa.eu/youreurope/garantias</a></figcaption></figure>`, true),
+  };
+  const texto = fonte.replace(/\{\{([\w.]+)\}\}/g, (todo, chave) => {
+    if (!valores[chave]) { erros.push(`${onde}: o marcador «${todo}» não existe (existem: ${Object.keys(valores).join(', ')})`); return todo; }
+    return valores[chave]();
+  });
+  return { texto, tokens };
+}
+
+function paginaMarkdown(ficheiro) {
+  const fonte = fs.readFileSync(path.join(CONTEUDO, 'paginas', ficheiro), 'utf8');
+  const [cabeca, ...corpo] = fonte.split(/\n---\n/);
+  const meta = Object.fromEntries(cabeca.split('\n').filter(Boolean).map((l) => { const i = l.indexOf(':'); return [l.slice(0, i).trim(), l.slice(i + 1).trim()]; }));
+  const { texto, tokens } = resolverMarcadores(corpo.join('\n---\n'), `Páginas › ${ficheiro}`);
+  let html = markdown(texto, ctx.url).replace(/<p>\u0000(\d+)\u0000<\/p>/g, (todo, i) => (tokens[Number(i)].bloco ? tokens[Number(i)].html : todo));
+  html = html.replace(/\u0000(\d+)\u0000/g, (_, i) => tokens[Number(i)].html);
+  const slug = ficheiro.replace(/\.md$/, '');
+  const fotoExiste = (f) => fotos[f] && dadosRegras.ficheirosFotos.includes(f);
+  if (meta.foto && !fotoExiste(meta.foto)) erros.push(`Páginas › ${ficheiro}: a fotografia «${meta.foto}» não existe`);
+  const indexar = !/^(n[ãa]o|false)$/i.test(meta.indexar || '');
+  return { caminho: `/${slug}/`, titulo: meta.titulo, tituloSeo: meta.tituloSeo, subtitulo: meta.subtitulo, modelo: meta.modelo, descricao: meta.descricao, atualizado: meta.atualizado, foto: meta.foto && fotoExiste(meta.foto) ? meta.foto : '', indexar, html };
+}
+
+// ---------------------------------------------------------------- páginas
+const saidas = [];
+saidas.push(paginas.inicio(ctx));
+saidas.push(paginas.loja(ctx));
+for (const c of categoriasComPecas) saidas.push(paginas.loja(ctx, c.slug));
+for (const p of produtos) saidas.push(paginas.peca(ctx, p));
+saidas.push(paginas.colecoes(ctx));
+for (const c of colecoes) saidas.push(paginas.colecao(ctx, c));
+saidas.push(paginas.contactos(ctx));
+saidas.push(paginas.pedido(ctx));
+for (const f of PAGINAS_MD) saidas.push(paginas.texto(ctx, paginaMarkdown(f)));
+saidas.push(paginas.erro404(ctx));
+
+if (erros.length) parar(`A publicação parou: ${erros.length} ${erros.length === 1 ? 'problema' : 'problemas'}.`, erros, { tecnico: true });
+
+for (const s of saidas) {
+  const html = pagina(ctx, s);
+  const destino = s.caminho.endsWith('.html') ? path.join(SAIDA, s.caminho) : path.join(SAIDA, s.caminho, 'index.html');
+  fs.mkdirSync(path.dirname(destino), { recursive: true });
+  fs.writeFileSync(destino, html);
+}
+
+// ---------------------------------------------------------------- robots, sitemap, _headers
+const indexaveis = saidas.filter((s) => s.caminho !== '/404.html' && s.indexar !== false);
+if (producao) {
+  let lastmod = {};
+  try {
+    const data = (ficheirosFonte) => execFileSync('git', ['log', '-1', '--format=%cs', '--', ...ficheirosFonte], { cwd: RAIZ, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+    for (const s of indexaveis) {
+      let fontes = ['content/site.json'];
+      if (s.caminho === '/') fontes = ['content/inicio.json', 'content/produtos', 'content/colecoes'];
+      else if (s.caminho.startsWith('/pecas/')) fontes = [`content/produtos/${s.caminho.split('/')[2]}.json`];
+      else if (s.caminho.startsWith('/colecoes/') && s.caminho.split('/')[2]) fontes = [`content/colecoes/${s.caminho.split('/')[2]}.json`];
+      else if (s.caminho.startsWith('/colecoes/')) fontes = ['content/colecoes'];
+      else if (s.caminho.startsWith('/loja/')) fontes = ['content/produtos', 'content/categorias.json'];
+      else if (existe(`content/paginas${s.caminho.replace(/\/$/, '')}.md`)) fontes = [`content/paginas${s.caminho.replace(/\/$/, '')}.md`];
+      lastmod[s.caminho] = data(fontes) || hoje;
+    }
+  } catch { lastmod = {}; }
+  fs.writeFileSync(path.join(SAIDA, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${indexaveis.map((s) => `  <url><loc>${ctx.absoluto(s.caminho)}</loc><lastmod>${lastmod[s.caminho] || hoje}</lastmod></url>`).join('\n')}
+</urlset>
+`);
+}
+// Pré-visualização: fechada aos motores de busca, mas aberta aos robôs que fazem a pré-visualização
+// das ligações no WhatsApp e no Facebook (sem isto, partilhar o link mostra-se sem imagem).
+fs.writeFileSync(path.join(SAIDA, 'robots.txt'), producao
+  ? `User-agent: *\nAllow: /\n\nSitemap: ${ctx.absoluto('/sitemap.xml')}\n`
+  : 'User-agent: facebookexternalhit\nAllow: /\n\nUser-agent: WhatsApp\nAllow: /\n\nUser-agent: *\nDisallow: /\n');
+if (dominio) {
+  const umAno = '  Cache-Control: public, max-age=31536000, immutable\n';
+  const seguranca = '/*\n  X-Content-Type-Options: nosniff\n  X-Frame-Options: SAMEORIGIN\n  Content-Security-Policy: frame-ancestors \'self\'\n  Referrer-Policy: strict-origin-when-cross-origin\n  Strict-Transport-Security: max-age=86400\n';
+  fs.writeFileSync(path.join(SAIDA, '_headers'), seguranca + ['/assets/site-*', '/assets/catalogo-*', '/assets/video/*'].map((r) => `${r}\n${umAno}`).join(''));
+}
+fs.writeFileSync(path.join(SAIDA, '.nojekyll'), '');
+
+// ---------------------------------------------------------------- verificação do que saiu
+const problemas = [];
+const todosHtml = [];
+(function andar(d) { for (const f of fs.readdirSync(d)) { const p = path.join(d, f); if (fs.statSync(p).isDirectory()) andar(p); else if (f.endsWith('.html')) todosHtml.push(p); } })(SAIDA);
+/* Nada dos outros sites do Renato (este nasceu com a infraestrutura da BE!Creative, que veio da Dream Art):
+   nem o nome, nem a terra, nem os contactos de lá. */
+const RESTOS = /dream ?art|mimices|be!?creative|creativebe|bedesign|rio tinto|gondomar|914 ?995|localhost:4(880|960)|criacoes|celebra[çc]/i;
+for (const [nome, buf] of [[ficheiros.css, css], [ficheiros.js, js]]) {
+  const m = buf.toString('utf8').match(RESTOS);
+  if (m) problemas.push(`assets/${nome}: tem «${m[0]}» (resto de outro site)`);
+}
+for (const f of todosHtml) {
+  const html = fs.readFileSync(f, 'utf8');
+  const onde = path.relative(SAIDA, f);
+  for (const lixo of ['{{', 'undefined', 'NaN', '[object Object]']) if (html.includes(lixo)) problemas.push(`${onde}: contém «${lixo}»`);
+  const resto = html.match(RESTOS);
+  if (resto) problemas.push(`${onde}: tem «${resto[0]}» (resto de outro site)`);
+  if (/obriga[çc][ãa]o de pagar/i.test(html)) problemas.push(`${onde}: tem a fórmula «obrigação de pagar», que o Renato não quer em nenhum site`);
+  if (producao && html.includes('por-confirmar')) problemas.push(`${onde}: ainda tem texto por confirmar`);
+  if (!html.includes('<!-- legal-comum:livro ')) problemas.push(`${onde}: falta a ligação ao Livro de Reclamações`);
+  if ((html.match(/<h1[\s>]/g) || []).length !== 1) problemas.push(`${onde}: tem ${(html.match(/<h1[\s>]/g) || []).length} títulos h1 (tem de ter um)`);
+  if (!producao && !html.includes('name="robots" content="noindex')) problemas.push(`${onde}: a pré-visualização tem de ser noindex`);
+  for (const m of html.matchAll(/<img\b[^>]*>/g)) {
+    if (!/\salt="/.test(m[0])) problemas.push(`${onde}: imagem sem alt: ${m[0].slice(0, 80)}`);
+    if (!/\swidth="\d+"/.test(m[0]) || !/\sheight="\d+"/.test(m[0])) problemas.push(`${onde}: imagem sem width/height: ${m[0].slice(0, 80)}`);
+  }
+  for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+    try { const j = JSON.parse(m[1]); if (!j['@context'] || !j['@type']) problemas.push(`${onde}: JSON-LD sem @context ou @type`); } catch (e) { problemas.push(`${onde}: JSON-LD que não se lê (${e.message})`); }
+  }
+  const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
+  const repetidos = ids.filter((x, i) => ids.indexOf(x) !== i);
+  if (repetidos.length) problemas.push(`${onde}: ids repetidos: ${[...new Set(repetidos)].join(', ')}`);
+  for (const m of html.matchAll(/<(?:script|link|img|source|iframe|video)\b[^>]*\s(?:src|srcset|href)="(https?:\/\/[^"]+)"/g)) {
+    if (!/^<link[^>]*rel="canonical"/.test(m[0]) && !m[1].startsWith(ORIGEM)) problemas.push(`${onde}: carrega de fora: ${m[1].slice(0, 80)}`);
+  }
+  for (const m of html.matchAll(/\s(?:href|src|poster)="([^"]+)"/g)) {
+    let u = m[1].replace(/&amp;/g, '&');
+    if (/^(https?:|mailto:|tel:|#|data:)/.test(u)) continue;
+    if (base && !u.startsWith(base + '/')) { problemas.push(`${onde}: ligação sem o prefixo ${base}: ${u}`); continue; }
+    u = u.slice(base.length).split(/[?#]/)[0];
+    const alvo = path.join(SAIDA, decodeURIComponent(u));
+    const ok = fs.existsSync(alvo) && (fs.statSync(alvo).isFile() || fs.existsSync(path.join(alvo, 'index.html')));
+    if (!ok) problemas.push(`${onde}: ligação partida: ${m[1]}`);
+  }
+  for (const m of html.matchAll(/\ssrcset="([^"]+)"/g)) {
+    for (const parte of m[1].split(',')) {
+      const u = parte.trim().split(/\s+/)[0].slice(base.length);
+      if (!fs.existsSync(path.join(SAIDA, u))) problemas.push(`${onde}: imagem em falta no srcset: ${u}`);
+    }
+  }
+  const og = html.match(/property="og:image" content="([^"]+)"/)?.[1];
+  if (!og) problemas.push(`${onde}: falta o cartão de partilha (og:image)`);
+  if (og && !fs.existsSync(path.join(SAIDA, og.replace(ORIGEM + base, '')))) problemas.push(`${onde}: o cartão de partilha não existe: ${og}`);
+}
+for (const c of categorias.filter((k) => !categoriasComPecas.includes(k))) {
+  if (fs.existsSync(path.join(SAIDA, 'loja', c.slug))) problemas.push(`loja/${c.slug}/: uma categoria sem peças não pode ter página`);
+}
+if (problemas.length) parar(`A publicação parou: o site saiu com ${problemas.length} problemas.`, [...new Set(problemas)].slice(0, 60).map((p) => `Gerador: ${p}`), { tecnico: true });
+
+for (const a of avisos) console.warn(`  ! ${a}`);
+console.log(`site: ${saidas.length} páginas em ${path.relative(RAIZ, SAIDA) || '.'}/ (${producao ? `produção, ${DOMINIO}` : dominio ? `${DOMINIO}, ainda fechado aos motores de busca` : base ? `pré-visualização, ${ORIGEM}${base}/` : 'local'}), ${produtos.length} peças, ${categoriasComPecas.length} categorias, ${colecoes.length} coleções, hoje ${hoje}`);

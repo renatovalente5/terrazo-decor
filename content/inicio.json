@@ -1,0 +1,96 @@
+{
+  "seo": {
+    "titulo": "Terrazo.Decor — Flower boxes, velas e presentes artesanais com significado",
+    "descricao": "Flower boxes com nome, velas e Wax Melts em cera vegetal e peças em Jesmonite, feitos à mão pela Sara: presentes com significado, para ti e para oferecer."
+  },
+  "capa": {
+    "etiqueta": "Feito à mão · com significado",
+    "titulo": "Para tornar especial",
+    "tituloItalico": "o que já importa.",
+    "texto": "Flower boxes, velas e Wax Melts em cera vegetal, e peças em Jesmonite. Feitos por mim, um a um — para ti e para oferecer.",
+    "botao": "Ver a loja",
+    "ligacao": "/loja/",
+    "fotos": [
+      "flower-box-com-nome-1",
+      "flower-box-girassois-1"
+    ]
+  },
+  "colecao": {
+    "slug": "a-christmas-tale",
+    "etiqueta": "Coleção de Natal 2026",
+    "botao": "Ver a coleção"
+  },
+  "loja": {
+    "titulo": "A loja"
+  },
+  "nomes": {
+    "titulo": "Com o nome de quem recebe",
+    "texto": "Cada caixa leva o nome a dourado. Diz-me para quem é, as cores de que gosta, e eu trato do resto.",
+    "botao": "Pedir uma flower box",
+    "ligacao": "/pecas/flower-box-com-nome/",
+    "fotos": [
+      "flower-box-com-nome-4",
+      "flower-box-girassois-3",
+      "flower-box-com-nome-6",
+      "flower-box-adoro-te-mae-2",
+      "flower-box-com-nome-5"
+    ]
+  },
+  "aromas": {
+    "etiqueta": "Wax Melts em cera vegetal",
+    "titulo": "Aromas para os pequenos rituais",
+    "foto": "wax-melts-2",
+    "ligacao": "/pecas/wax-melts/",
+    "lista": [
+      {
+        "nome": "Linho Branco",
+        "nota": "Janelas abertas e roupa acabada de lavar",
+        "cor": "#E9E4D6"
+      },
+      {
+        "nome": "Maçã & Canela",
+        "nota": "O aconchego do outono",
+        "cor": "#C5763A"
+      },
+      {
+        "nome": "Baunilha",
+        "nota": "Um clássico irresistível",
+        "cor": "#EAD9B5"
+      },
+      {
+        "nome": "Arando, Laranja & Canela",
+        "nota": "Um sussurro de Natal",
+        "cor": "#A9433A"
+      },
+      {
+        "nome": "Bolachas de Gengibre",
+        "nota": "Filme, manta e sofá",
+        "cor": "#B07A45"
+      },
+      {
+        "nome": "Caramelo Salgado",
+        "nota": "O mês mais doce do ano",
+        "cor": "#C99A5B"
+      },
+      {
+        "nome": "Café Torrado",
+        "nota": "Manhãs de foco e energia",
+        "cor": "#5B4334"
+      },
+      {
+        "nome": "Lavanda & Camomila",
+        "nota": "Dias longos, noites serenas",
+        "cor": "#B9A9C9"
+      }
+    ]
+  },
+  "sara": {
+    "etiqueta": "By Sara",
+    "titulo": "Terrazo, só com um Z",
+    "texto": "Comecei em 2025 com a Jesmonite. Das lascas que sobravam nasceram as peças em terrazzo — e o nome. Hoje faço também flower boxes, velas e Wax Melts em cera vegetal: à mão, uma a uma, a pensar em quem as vai receber.",
+    "citacao": "Quando digo que cada peça leva um pedacinho de mim, não podia falar mais a sério.",
+    "foto": "sara-2",
+    "botao": "A minha história",
+    "ligacao": "/sobre/"
+  }
+}

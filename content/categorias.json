@@ -1,0 +1,51 @@
+[
+  {
+    "slug": "flower-boxes",
+    "nome": "Flower Boxes",
+    "titulo": "Flower boxes com nome",
+    "resumo": "Arranjos de flores em cera vegetal com flores secas, numa caixa com o nome de quem os recebe. Nunca há dois iguais.",
+    "foto": "flower-box-rosas-1"
+  },
+  {
+    "slug": "velas",
+    "nome": "Velas",
+    "titulo": "Velas artesanais",
+    "resumo": "Velas de cera vegetal feitas em molde: flores, abóboras, soldadinhos e as peças de cada estação.",
+    "foto": "aboboras-1"
+  },
+  {
+    "slug": "wax-melts",
+    "nome": "Wax Melts",
+    "titulo": "Wax Melts e aromas",
+    "resumo": "Aromas em cera vegetal para derreter no queimador, tea lights e ambientadores para o roupeiro.",
+    "foto": "wax-melts-1"
+  },
+  {
+    "slug": "coffrets",
+    "nome": "Coffrets",
+    "titulo": "Coffrets de oferta",
+    "resumo": "Caixas de oferta montadas à medida: tu escolhes as peças, eu junto tudo.",
+    "foto": "coffret-a-tua-medida-1"
+  },
+  {
+    "slug": "jesmonite",
+    "nome": "Jesmonite",
+    "titulo": "Peças em Jesmonite",
+    "resumo": "Bandejas, vasos e peças decorativas em Jesmonite, algumas em terrazzo, feitas e lixadas à mão.",
+    "foto": "vaso-com-bandeja-1"
+  },
+  {
+    "slug": "personalizados",
+    "nome": "Personalizados",
+    "titulo": "Presentes personalizados",
+    "resumo": "Quadros, postais, estrelas e canecas com nomes, datas e mensagens.",
+    "foto": "quadro-de-flores-1"
+  },
+  {
+    "slug": "lembrancas",
+    "nome": "Lembranças",
+    "titulo": "Lembranças para eventos",
+    "resumo": "Lembranças para casamentos, batizados, escolas e eventos, feitas às dezenas e a combinar com a ocasião.",
+    "foto": "coracoes-de-bodas-1"
+  }
+]

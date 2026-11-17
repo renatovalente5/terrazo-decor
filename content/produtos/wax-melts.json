@@ -1,0 +1,56 @@
+{
+  "nome": "Wax Melts",
+  "fotos": [
+    "wax-melts-1",
+    "wax-melts-3",
+    "wax-melts-2",
+    "wax-melts-4",
+    "wax-melts-5",
+    "wax-melts-6"
+  ],
+  "resumo": "Cera vegetal perfumada para derreter no queimador: o aroma espalha-se pela casa sem chama na cera.",
+  "descricao": "Escolhi a cera vegetal para os meus Wax Melts. Cada peça dá 8 a 12 horas de aroma: põe-se uma ou duas no prato do queimador e deixa-se derreter. Quando o aroma acabar, a cera tira-se e põem-se peças novas.\n\nA embalagem nova traz mais cera, para mais momentos perfumados em casa.",
+  "preco": 6,
+  "desde": true,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [
+    {
+      "nome": "Aroma",
+      "valores": [
+        {
+          "nome": "Linho Branco"
+        },
+        {
+          "nome": "Maçã & Canela"
+        },
+        {
+          "nome": "Baunilha"
+        },
+        {
+          "nome": "Arando, Laranja & Canela"
+        },
+        {
+          "nome": "Bolachas de Gengibre"
+        },
+        {
+          "nome": "Caramelo Salgado"
+        },
+        {
+          "nome": "Café Torrado"
+        },
+        {
+          "nome": "Lavanda & Camomila"
+        }
+      ]
+    }
+  ],
+  "personalizacao": {},
+  "quantidadeMinima": 1,
+  "video": "wax-melts",
+  "categoria": "wax-melts",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 1
+}

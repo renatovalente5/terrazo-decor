@@ -1,0 +1,22 @@
+{
+  "nome": "Vela de cocktail",
+  "fotos": [
+    "vela-de-cocktail-1",
+    "vela-de-cocktail-2"
+  ],
+  "resumo": "Uma vela num copo de cocktail, cor de laranja, com uma margarida de cera a flutuar.",
+  "descricao": "Imagina o melhor fim de tarde de junho: o sol quente, uma bebida fresca e conversas demoradas. Esta vela traz isso para casa, num copo de cocktail de vidro.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {},
+  "quantidadeMinima": 1,
+  "video": "vela-de-cocktail",
+  "categoria": "velas",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 8
+}

@@ -1,0 +1,40 @@
+{
+  "nome": "Flower Box de margaridas",
+  "fotos": [
+    "flower-box-margaridas-1",
+    "flower-box-margaridas-2",
+    "flower-box-margaridas-3"
+  ],
+  "resumo": "Margaridas, rosas amarelas e brancas em cera, para um dia mais alegre.",
+  "descricao": "Margaridas e rosas em amarelo, branco e caramelo, com flores secas. Uma caixa para dar cor a qualquer domingo.\n\nAs flores são velas: para as acender, tira-se a flor do palito e põe-se num pratinho resistente ao calor, ou a flutuar num copo com água. Também se podem derreter num queimador, como Wax Melts. Nunca se acendem no arranjo.",
+  "preco": 9,
+  "desde": true,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [
+    {
+      "nome": "Tamanho",
+      "valores": [
+        {
+          "nome": "Pequena (9 €)"
+        },
+        {
+          "nome": "Grande (18 €)"
+        }
+      ]
+    }
+  ],
+  "personalizacao": {
+    "nome": true,
+    "frase": true,
+    "rotuloNome": "Nome na caixa",
+    "rotuloFrase": "Cores, ocasião ou mensagem"
+  },
+  "quantidadeMinima": 1,
+  "video": "",
+  "categoria": "flower-boxes",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 4
+}

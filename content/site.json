@@ -1,0 +1,39 @@
+{
+  "marca": "Terrazo.Decor",
+  "descricao": "Presentes artesanais com significado: flower boxes, velas e Wax Melts em cera vegetal e peças em Jesmonite, feitos à mão pela Sara, para ti e para oferecer.",
+  "assinatura": "Para ti & para oferecer.",
+  "contactos": {
+    "email": "",
+    "whatsapp": "",
+    "telefone": "",
+    "instagram": "terrazo_decor",
+    "facebook": "61573808382422",
+    "horario": ""
+  },
+  "local": {
+    "localidade": "",
+    "distrito": ""
+  },
+  "empresa": {
+    "nome": "",
+    "tipo": "",
+    "nif": "",
+    "morada": "",
+    "codigoPostal": "",
+    "localidade": "",
+    "concelho": "",
+    "iva": ""
+  },
+  "aviso": {
+    "texto": "",
+    "ate": "",
+    "ligacao": ""
+  },
+  "pedido": {
+    "prazo": "",
+    "pagamento": "",
+    "levantamento": "",
+    "envio": "",
+    "portes": ""
+  }
+}

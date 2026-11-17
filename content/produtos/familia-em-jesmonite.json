@@ -1,0 +1,25 @@
+{
+  "nome": "Família em Jesmonite",
+  "fotos": [
+    "familia-em-jesmonite-1",
+    "familia-em-jesmonite-2"
+  ],
+  "resumo": "Figuras abraçadas em Jesmonite, numa base com salpicos: uma por cada pessoa lá de casa.",
+  "descricao": "Cá em casa somos quatro. E por aí? As figuras abraçadas em Jesmonite branca, numa base com salpicos, com tantas pessoas quantas houver na família.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {
+    "frase": true,
+    "rotuloFrase": "Quantas pessoas (adultos e crianças)"
+  },
+  "quantidadeMinima": 1,
+  "video": "familia-em-jesmonite",
+  "categoria": "jesmonite",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 4
+}

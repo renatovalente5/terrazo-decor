@@ -1,0 +1,38 @@
+{
+  "nome": "Flores de cera",
+  "fotos": [
+    "flores-de-cera-1",
+    "flores-de-cera-2",
+    "flores-de-cera-3"
+  ],
+  "resumo": "Velas em forma de flor, soltas, com aroma: rosas, peónias, camélias e tulipas.",
+  "descricao": "As mesmas flores das flower boxes, soltas: para um miminho, para decorar uma mesa ou para juntar a uma prenda. Há em todas as cores.\n\nAs velas em molde não têm recipiente: acendem-se sempre sobre uma base resistente ao calor e nunca se deixam acesas sem ninguém por perto.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [
+    {
+      "nome": "Aroma",
+      "valores": [
+        {
+          "nome": "Lavanda & Camomila"
+        },
+        {
+          "nome": "Baunilha"
+        },
+        {
+          "nome": "Sem aroma"
+        }
+      ]
+    }
+  ],
+  "personalizacao": {},
+  "quantidadeMinima": 1,
+  "video": "",
+  "categoria": "velas",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 6
+}

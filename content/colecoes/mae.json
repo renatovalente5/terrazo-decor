@@ -1,0 +1,24 @@
+{
+  "titulo": "Mãe",
+  "epoca": "Dia da Mãe",
+  "quando": "Maio 2026",
+  "resumo": "Flores que não murcham e um «Adoro-te» que ilumina, para a pessoa que é o nosso porto seguro.",
+  "texto": "O laço que nos une, a luz que nos guia. Ser mãe tornou esta página real: quero que os meus filhos vejam que devemos lutar por aquilo de que gostamos e nunca desistir.",
+  "fotos": [
+    "flower-box-adoro-te-mae-1",
+    "vela-mae-em-vidro-3",
+    "bandeja-terrazzo-2",
+    "mini-flower-boxes-3",
+    "tulipas-de-lembranca-2"
+  ],
+  "produtos": [
+    "flower-box-adoro-te-mae",
+    "vela-mae-em-vidro",
+    "bandeja-terrazzo",
+    "tulipas-de-lembranca",
+    "mini-flower-boxes"
+  ],
+  "destaque": false,
+  "ordem": 3,
+  "publicado": true
+}

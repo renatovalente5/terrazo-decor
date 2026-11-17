@@ -1,0 +1,25 @@
+{
+  "nome": "Postal com flor",
+  "fotos": [
+    "postal-com-flor-1",
+    "postal-com-flor-2"
+  ],
+  "resumo": "Um postal com uma flor de cera embrulhada: um «lembrei-me de ti» delicado.",
+  "descricao": "Há mensagens que merecem ser iluminadas: um postal com uma tulipa de cera embrulhada em papel e laço, com a mensagem que quiseres.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {
+    "frase": true,
+    "rotuloFrase": "Mensagem do postal"
+  },
+  "quantidadeMinima": 1,
+  "video": "",
+  "categoria": "personalizados",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 6
+}

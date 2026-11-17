@@ -1,0 +1,41 @@
+{
+  "nome": "Vaso canelado com bandeja",
+  "fotos": [
+    "vaso-com-bandeja-1",
+    "vaso-com-bandeja-2",
+    "vaso-com-bandeja-3"
+  ],
+  "resumo": "Um vaso canelado e uma bandeja oval em Jesmonite, na cor que escolheres.",
+  "descricao": "Uma peça, inúmeras combinações: o vaso canelado para flores secas ou frescas, com a bandeja a condizer. Em salva, lilás, areia ou na cor que preferires.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [
+    {
+      "nome": "Cor",
+      "valores": [
+        {
+          "nome": "Salva"
+        },
+        {
+          "nome": "Lilás"
+        },
+        {
+          "nome": "Areia"
+        },
+        {
+          "nome": "Outra (diz-me)"
+        }
+      ]
+    }
+  ],
+  "personalizacao": {},
+  "quantidadeMinima": 1,
+  "video": "",
+  "categoria": "jesmonite",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 3
+}

@@ -1,0 +1,30 @@
+{
+  "nome": "Coffret de padrinhos",
+  "fotos": [
+    "coffret-de-padrinhos-1",
+    "coffret-de-padrinhos-2",
+    "coffret-de-padrinhos-3"
+  ],
+  "resumo": "Um coffret para fazer o convite aos padrinhos, pensado ao pormenor contigo.",
+  "descricao": "Cada detalhe é pensado para que, no momento do convite, tudo transmita exatamente o que sentes: velas, flores em cera, o convite com selo de lacre e a caixa com laço. Começamos com uma conversa e umas quantas ideias.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {
+    "nome": true,
+    "data": true,
+    "frase": true,
+    "rotuloNome": "Nomes dos padrinhos",
+    "rotuloData": "Data do batizado ou do casamento",
+    "rotuloFrase": "Cores ou ideias"
+  },
+  "quantidadeMinima": 1,
+  "video": "",
+  "categoria": "coffrets",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 2
+}

@@ -1,0 +1,27 @@
+{
+  "nome": "Caneca com nome",
+  "fotos": [
+    "caneca-com-nome-1",
+    "caneca-com-nome-2"
+  ],
+  "resumo": "Uma caneca com o nome e uma frase, para agradecer a quem cuida.",
+  "descricao": "Um presente útil e carregado de significado: uma caneca com o nome e uma frase, pensada para agradecer às educadoras e aos professores no fim do ano letivo — ou a quem quiseres.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {
+    "nome": true,
+    "frase": true,
+    "rotuloNome": "Nome",
+    "rotuloFrase": "Frase"
+  },
+  "quantidadeMinima": 1,
+  "video": "",
+  "categoria": "personalizados",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 3
+}

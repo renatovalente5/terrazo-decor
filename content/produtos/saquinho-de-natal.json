@@ -1,0 +1,22 @@
+{
+  "nome": "Saquinho de Natal",
+  "fotos": [
+    "saquinho-de-natal-1",
+    "saquinho-de-natal-2"
+  ],
+  "resumo": "Um saquinho branco com bolachas em relevo e flores secas, para dar o toque acolhedor ao Natal.",
+  "descricao": "Um saquinho que guarda um bocadinho da magia do Natal. Inspirado nos pequenos detalhes, com bolachas e estrelas em relevo, flores secas vermelhas e brancas e um laço dourado.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {},
+  "quantidadeMinima": 1,
+  "video": "saquinho-de-natal",
+  "categoria": "velas",
+  "novidade": true,
+  "publicado": true,
+  "ordem": 3
+}

@@ -1,0 +1,25 @@
+{
+  "nome": "Lembranças de agradecimento",
+  "fotos": [
+    "lembrancas-de-agradecimento-1",
+    "lembrancas-de-agradecimento-2"
+  ],
+  "resumo": "Mini arranjos com um cartão «Obrigado», para educadoras, professores e equipas.",
+  "descricao": "Para não partir sem deixar a gratidão registada: mini arranjos de flores de cera com um cartão de agradecimento, um para cada pessoa que marcou o caminho.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {
+    "frase": true,
+    "rotuloFrase": "Mensagem do cartão"
+  },
+  "quantidadeMinima": 5,
+  "video": "",
+  "categoria": "lembrancas",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 4
+}

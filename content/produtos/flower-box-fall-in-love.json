@@ -1,0 +1,27 @@
+{
+  "nome": "Flower Box FALL in love",
+  "fotos": [
+    "flower-box-fall-in-love-1",
+    "flower-box-fall-in-love-2"
+  ],
+  "resumo": "O outono numa caixa: abóboras, folhas e flores em cera em tons quentes.",
+  "descricao": "Quando idealizei esta flower box quis trazer para dentro de casa o aconchego do outono: os tons quentes, as texturas naturais e aquela sensação de conforto do nosso lar. Abóboras, folhas e flores em cera, numa caixa preta «FALL in love».\n\nAs flores são velas: para as acender, tira-se a flor do palito e põe-se num pratinho resistente ao calor, ou a flutuar num copo com água. Também se podem derreter num queimador, como Wax Melts. Nunca se acendem no arranjo.",
+  "preco": null,
+  "desde": false,
+  "inclui": [],
+  "medidas": [],
+  "composicao": "",
+  "opcoes": [],
+  "personalizacao": {
+    "nome": true,
+    "frase": true,
+    "rotuloNome": "Nome na caixa",
+    "rotuloFrase": "Cores, ocasião ou mensagem"
+  },
+  "quantidadeMinima": 1,
+  "video": "flower-box-fall-in-love",
+  "categoria": "flower-boxes",
+  "novidade": false,
+  "publicado": true,
+  "ordem": 6
+}
