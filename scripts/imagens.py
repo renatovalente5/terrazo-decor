@@ -166,8 +166,11 @@ def inicial(marca):
     palavra = palavra.crop(palavra.getbbox())
     pa = palavra.getchannel('A').load()
     pw, ph = palavra.size
-    colunas = [any(pa[x, y] > 24 for y in range(ph)) for x in range(pw)]
-    fim = next((x for x in range(1, pw) if colunas[x - 1] and not colunas[x]), pw)
+    # o «t» toca no «e»: corta-se na coluna com menos tinta entre as duas (ou na primeira vazia, se houver)
+    tinta = [sum(1 for y in range(ph) if pa[x, y] > 24) for x in range(pw)]
+    vazia = next((x for x in range(1, pw) if tinta[x - 1] and not tinta[x]), None)
+    ini, fim_busca = round(ph * .22), round(ph * .62)
+    fim = vazia if vazia is not None and vazia < fim_busca else min(range(ini, fim_busca), key=lambda x: (tinta[x], x))
     letra = palavra.crop((0, 0, fim, ph))
     return palavra, letra.crop(letra.getbbox())
 
