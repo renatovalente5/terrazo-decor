@@ -179,7 +179,6 @@ ${aromas.length ? `<section class="seccao" aria-labelledby="s-aromas">
   <div class="contentor sara">
     <div class="sara__fotos">
       ${fotoSara ? `<figure class="sara__foto">${imagem(ctx, fotoSara, { tamanhos: '(min-width: 980px) 440px, 80vw', moldura: 4 / 5 })}</figure>` : ''}
-      <img class="sara__tulipas" src="${ctx.asset(`img/${ctx.manifesto.motivo.webp}`)}" width="${ctx.manifesto.motivo.w}" height="${ctx.manifesto.motivo.h}" alt="" loading="lazy" decoding="async">
     </div>
     <div class="sara__texto">
       ${h.sara.etiqueta ? `<p class="etiqueta">${esc(h.sara.etiqueta)}</p>` : ''}
@@ -463,9 +462,8 @@ export function texto(ctx, m) {
 export function erro404(ctx) {
   const conteudo = `
 <div class="contentor pagina-texto erro404">
-  <img class="erro404__tulipas" src="${ctx.asset(`img/${ctx.manifesto.motivo.webp}`)}" width="${ctx.manifesto.motivo.w}" height="${ctx.manifesto.motivo.h}" alt="" decoding="async">
   ${cabecaPagina({ titulo: 'Esta página não existe', texto: 'Pode ter mudado de sítio. Procura na loja, ou volta ao início.' })}
-  <div class="botoes botoes--centro"><a class="botao" href="${ctx.url('/loja/')}">Ver a loja${ico('seta')}</a><a class="botao botao--linha" href="${ctx.url('/')}">Página inicial</a></div>
+  <div class="botoes"><a class="botao" href="${ctx.url('/loja/')}">Ver a loja${ico('seta')}</a><a class="botao botao--linha" href="${ctx.url('/')}">Página inicial</a></div>
 </div>`;
   return { caminho: '/404.html', titulo: 'Página não encontrada', descricao: 'Esta página não existe.', conteudo, indexar: false, classe: 'pagina-404' };
 }
