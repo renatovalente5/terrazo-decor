@@ -55,7 +55,7 @@ Escrevemos os nomes, as datas e as frases exatamente como nos indicar, com os ac
 
 **As peças personalizadas não têm direito de livre resolução** desde a confirmação da encomenda, mesmo que ainda não as tenhamos começado: são as que levam um nome, uma data, uma frase ou outro pormenor que nos pediu, ou que são feitas segundo as suas indicações, como as flower boxes com as cores escolhidas (Decreto-Lei n.º 24/2014, artigo 17.º, n.º 1, alínea c)).
 
-Se encomendar uma peça sem qualquer personalização, tem 14 dias a contar do dia em que a recebe para desistir da compra, sem dar justificação: basta dizer-nos, por {{email}} ou pelo {{instagram}}. Devolvemos tudo o que pagou por essa peça, incluindo os portes de envio (até ao valor do envio mais barato), em 14 dias a contar da sua comunicação e pelo mesmo meio de pagamento; podemos esperar pela peça, ou pela prova de que a enviou, antes de reembolsar. Tem 14 dias para a devolver, sem uso além do necessário para a ver, e os custos da devolução ficam a seu cargo.
+Se encomendar uma peça sem qualquer personalização, tem 14 dias a contar do dia em que a recebe para desistir da compra. Para desistir, diga-nos por {{email}} ou pelo {{instagram}}. Devolvemos tudo o que pagou por essa peça, incluindo os portes de envio (até ao valor do envio mais barato), em 14 dias a contar da sua comunicação e pelo mesmo meio de pagamento; podemos esperar pela peça, ou pela prova de que a enviou, antes de reembolsar. Tem 14 dias para a devolver, sem uso além do necessário para a ver, e os custos da devolução ficam a seu cargo.
 
 ## Garantia
 

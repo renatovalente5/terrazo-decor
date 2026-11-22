@@ -125,6 +125,8 @@ else {
     });
     t('o cartão de partilha do início é o do logótipo', () => verdade(/og:image" content="[^"]*\/terrazo-decor-[0-9a-f]+-partilha\.jpg"/.test(inicio)));
     t('nada de restos de outros sites', () => verdade(!/dream ?art|mimices|be!?creative|creativebe|coimbra/i.test(inicio + ler('termos-e-condicoes/index.html') + ler('contactos/index.html'))));
+    // (22 nov 2026, o Renato) a desistência diz o prazo e onde estão as condições, sem empurrar o cliente para desistir
+    t('a desistência sem «sem dar justificação», «basta dizer-nos» nem «como desistir»', () => { for (const p of ['termos-e-condicoes', 'perguntas-frequentes', 'como-encomendar']) verdade(!/(?<!in)justifica|motivo|\bbasta\b|vê como|veja como|como desistir/i.test(ler(`${p}/index.html`)), p); });
   }
   // em produção, sem os dados legais da Sara, a construção tem de parar
   const p = construir(['--producao']);
